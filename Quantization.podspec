@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.name         = "Quantization"
   s.version      = "1.0"
   s.summary      = "Get image dominant color."
+  s.swift_version = '4.2'
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -64,8 +65,8 @@ Pod::Spec.new do |s|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  s.platform     = :ios
-  # s.platform     = :ios, "5.0"
+  # s.platform     = :ios
+  s.platform     = :ios, "10.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
