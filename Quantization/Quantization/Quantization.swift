@@ -22,17 +22,21 @@ import Foundation
 
 public class Quantization: NSObject {
     
+    var accuracy: CGFloat = 5
     var image: UIImage = UIImage()
-    var originalImage: UIImage = UIImage()
-    
-    let resize: CGSize = CGSize(width: 768, height: 768)
     
     /*
      *  Define Image
      */
-    public func setImage(image: UIImage) {
-        self.originalImage = image
-        self.image = image.resized(to: resize)
+    public func setImage(_ image: UIImage) {
+        self.image = image
+    }
+    
+    /*
+     *  Define accuracy
+     */
+    public func setAccuracy(_ accuracy: CGFloat) {
+        self.accuracy = accuracy
     }
     
     /*
@@ -46,10 +50,10 @@ public class Quantization: NSObject {
         let pixelData = self.image.cgImage!.dataProvider!.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
 
-        for varx in 0 ... Int(self.image.size.width - 1) {
-            for vary in 0 ... Int(self.image.size.height - 1) {
+        for varx in stride(from: 0, to: self.image.size.width, by: self.accuracy) {
+            for vary in stride(from: 0, to: self.image.size.height, by: self.accuracy) {
                 
-                let position1: Int = 4 * (vary * Int(self.image.size.width) + varx)
+                let position1: Int = 4 * (Int(vary) * Int(self.image.size.width) + Int(varx))
                 let red     = CGFloat(data[position1 + 0])
                 let green   = CGFloat(data[position1 + 1])
                 let blue    = CGFloat(data[position1 + 2])
@@ -105,8 +109,8 @@ public class Quantization: NSObject {
             var alpha: CGFloat = 0
             colorArray[i].getRed(&red, green: &green, blue: &blue, alpha: &alpha)
             
-            let c1 = (color1 == "red") ? red : green
-            let c2 = (color2 == "red") ? red : blue
+            let c1 = (color1 == ColorIdentifier.red.rawValue) ? red : green
+            let c2 = (color2 == ColorIdentifier.red.rawValue) ? red : blue
             if c1 >= c2 {
                 color1Array.append(colorArray[i])
             }
@@ -155,19 +159,6 @@ public class Quantization: NSObject {
         var firstArray = self.firstFilter()
         var secondArray = [UIColor]()
         
-        /*
-         * Sometimes resizing generate an error on firstFilter(). So we try another method of resizing
-         */
-        if firstArray.count == 0 {
-            self.image = resizeImage(image: originalImage, targetSize: resize)
-            firstArray = self.firstFilter()
-            
-            // Belt and suspenders!
-            if firstArray.count == 0 {
-                return UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            }
-        }
-        
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
@@ -175,52 +166,15 @@ public class Quantization: NSObject {
         firstArray[0].getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         
         if (red >= green) && (red >= blue) {
-            secondArray = self.secondFilter(colorArray: firstArray, color1: "green", color2: "blue")
+            secondArray = self.secondFilter(colorArray: firstArray, color1: ColorIdentifier.green.rawValue, color2: ColorIdentifier.blue.rawValue)
         }
         else if (green >= red) && (green >= blue) {
-            secondArray = self.secondFilter(colorArray: firstArray, color1: "red", color2: "blue")
+            secondArray = self.secondFilter(colorArray: firstArray, color1: ColorIdentifier.red.rawValue, color2: ColorIdentifier.blue.rawValue)
         }
         else if (blue >= red) && (blue >= green) {
-            secondArray = self.secondFilter(colorArray: firstArray, color1: "green", color2: "red")
+            secondArray = self.secondFilter(colorArray: firstArray, color1: ColorIdentifier.green.rawValue, color2: ColorIdentifier.red.rawValue)
         }
         
         return self.calculateAverage(colorArray: secondArray)
-    }
-}
-
-extension Quantization {
-    
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        
-        // Figure out what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if widthRatio > heightRatio {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-        
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage!
-    }
-}
-
-extension UIImage {
-    func resized(to size: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
-        }
     }
 }

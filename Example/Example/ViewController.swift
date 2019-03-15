@@ -59,7 +59,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     func quantizeImage(img: UIImage) {
         let quantizeImage = Quantization()
-        quantizeImage.setImage(image: img)
+        // quantizeImage.setAccuracy(10) // Change accuracy if quantization is too long
+        quantizeImage.setImage(img)
         let dominant_color = quantizeImage.getDominantColor()
         self.background.backgroundColor = dominant_color
     }

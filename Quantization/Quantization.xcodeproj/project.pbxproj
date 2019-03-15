@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F093B1B82239A7B700E4A5D7 /* Quantization.h in Headers */ = {isa = PBXBuildFile; fileRef = F093B1B62239A7B700E4A5D7 /* Quantization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F099913C2239B22800564DC6 /* Quantization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F099913B2239B22800564DC6 /* Quantization.swift */; };
+		F0A2454C223C05700027C5AA /* ColorIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A2454B223C05700027C5AA /* ColorIdentifiers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +17,7 @@
 		F093B1B62239A7B700E4A5D7 /* Quantization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quantization.h; sourceTree = "<group>"; };
 		F093B1B72239A7B700E4A5D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F099913B2239B22800564DC6 /* Quantization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quantization.swift; sourceTree = "<group>"; };
+		F0A2454B223C05700027C5AA /* ColorIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorIdentifiers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 			children = (
 				F093B1B62239A7B700E4A5D7 /* Quantization.h */,
 				F099913B2239B22800564DC6 /* Quantization.swift */,
+				F0A2454B223C05700027C5AA /* ColorIdentifiers.swift */,
 				F093B1B72239A7B700E4A5D7 /* Info.plist */,
 			);
 			path = Quantization;
@@ -134,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0A2454C223C05700027C5AA /* ColorIdentifiers.swift in Sources */,
 				F099913C2239B22800564DC6 /* Quantization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
